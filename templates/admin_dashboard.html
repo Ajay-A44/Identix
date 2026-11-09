@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Dashboard | Verixa
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <div class="admin-page-head">
+
+        <div>
+
+            <div class="eyebrow">
+                ADMIN CONTROL CENTER
+            </div>
+
+            <h1>
+                Verification dashboard
+            </h1>
+
+            <p>
+                Review student requests and manage verification decisions.
+            </p>
+
+        </div>
+
+        <div class="admin-session-pill">
+            <span class="admin-session-dot"></span>
+            Secure session active
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY
+         ===================================================== -->
+
+    <section class="admin-stats">
+
+        <div class="admin-stat-card">
+
+            <span>Total requests</span>
+
+            <strong>
+                {{ stats.total }}
+            </strong>
+
+            <small>
+                All submitted requests
+            </small>
+
+        </div>
+
+
+        <div class="admin-stat-card highlight">
+
+            <span>Needs review</span>
+
+            <strong>
+                {{ stats.under_review }}
+            </strong>
+
+            <small>
+                Awaiting admin action
+            </small>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <span>Corrections</span>
+
+            <strong>
+                {{ stats.correction_required }}
+            </strong>
+
+            <small>
+                Sent back to students
+            </small>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <span>Approved</span>
+
+            <strong>
+                {{ stats.verified }}
+            </strong>
+
+            <small>
+                Successfully verified
+            </small>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <span>Rejected</span>
+
+            <strong>
+                {{ stats.rejected }}
+            </strong>
+
+            <small>
+                Requests rejected
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         REVIEW SERVICES
+         ===================================================== -->
+
+    <section class="admin-review-section">
+
+        <div class="admin-section-heading">
+
+            <div>
+
+                <div class="eyebrow">
+                    REVIEW SERVICES
+                </div>
+
+                <h2>
+                    Verification queues
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-queue-grid">
+
+
+            <!-- SCHOLARSHIP -->
+
+            <article class="admin-queue-card">
+
+                <div class="admin-queue-top">
+
+                    <div class="admin-queue-icon blue">
+                        S
+                    </div>
+
+                    <span class="queue-service-label">
+                        SERVICE 01
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Scholarship Verification
+                </h3>
+
+
+                <p>
+                    Review scholarship details submitted by students.
+                </p>
+
+
+                <div class="admin-queue-bottom">
+
+                    <div class="pending-number">
+                        {{ stats.scholarship_pending }}
+                    </div>
+
+                    <div class="pending-text">
+                        <strong>
+                            Pending review
+                        </strong>
+
+                        <span>
+                            Requests waiting for action
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('admin_scholarships') }}"
+                    class="admin-primary-action"
+                >
+                    Open scholarship queue
+                    <span>→</span>
+                </a>
+
+            </article>
+
+
+            <!-- ADMISSION -->
+
+            <article class="admin-queue-card">
+
+                <div class="admin-queue-top">
+
+                    <div class="admin-queue-icon slate">
+                        A
+                    </div>
+
+                    <span class="queue-service-label">
+                        SERVICE 02
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Higher Semester Admission
+                </h3>
+
+
+                <p>
+                    Review admission details, marks cards and ID documents.
+                </p>
+
+
+                <div class="admin-queue-bottom">
+
+                    <div class="pending-number">
+                        {{ stats.admission_pending }}
+                    </div>
+
+                    <div class="pending-text">
+                        <strong>
+                            Pending review
+                        </strong>
+
+                        <span>
+                            Requests waiting for action
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('admin_admissions') }}"
+                    class="admin-primary-action"
+                >
+                    Open admission queue
+                    <span>→</span>
+                </a>
+
+            </article>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

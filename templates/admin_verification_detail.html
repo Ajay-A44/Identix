@@ -1,0 +1,849 @@
+{% extends "base.html" %}
+
+{% block title %}
+Review Application | Verixa
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <!-- BACK -->
+    <a
+        href="{{
+            url_for('admin_scholarships')
+            if verification['purpose'] == 'SCHOLARSHIP'
+            else url_for('admin_admissions')
+        }}"
+        class="back-link"
+    >
+        ← Back to Queue
+    </a>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="review-page-header">
+
+        <div>
+
+            <div class="eyebrow">
+                APPLICATION REVIEW
+            </div>
+
+            <h1>
+                {{ verification['verification_id'] }}
+            </h1>
+
+            <p>
+                {{ student['name'] }}
+                ·
+                {{ student['usn'] }}
+            </p>
+
+        </div>
+
+
+        <div class="review-header-status">
+
+            <span>
+                CURRENT STATUS
+            </span>
+
+
+            {% if verification['status'] == 'UNDER_REVIEW' %}
+
+                <span class="status-badge status-review">
+                    Under Review
+                </span>
+
+            {% elif verification['status'] == 'VERIFIED' %}
+
+                <span class="status-badge status-approved">
+                    Approved
+                </span>
+
+            {% elif verification['status'] == 'REJECTED' %}
+
+                <span class="status-badge status-rejected">
+                    Rejected
+                </span>
+
+            {% elif verification['status'] == 'CORRECTION_REQUIRED' %}
+
+                <span class="status-badge status-correction">
+                    Correction Required
+                </span>
+
+            {% else %}
+
+                <span class="status-badge status-pending">
+                    Not Submitted
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         REGISTERED VS SUBMITTED
+         ===================================================== -->
+
+    <section class="review-comparison">
+
+        <!-- REGISTERED -->
+        <div class="review-panel">
+
+            <div class="panel-label">
+                REGISTERED INFORMATION
+            </div>
+
+            <h2>
+                Student record
+            </h2>
+
+
+            <div class="review-fields">
+
+                <div>
+                    <span>Name</span>
+                    <strong>
+                        {{ student['name'] }}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>USN</span>
+                    <strong>
+                        {{ student['usn'] }}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Date of Birth</span>
+                    <strong>
+                        {{ student['dob'] }}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Email</span>
+                    <strong>
+                        {{ student['email'] }}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Mobile</span>
+                    <strong>
+                        {{ student['phone'] }}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Course</span>
+                    <strong>
+                        {{ student['course'] }}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Branch</span>
+                    <strong>
+                        {{ student['branch'] }}
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Year</span>
+                    <strong>
+                        {{ student['year'] }}
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBMITTED -->
+        <div class="review-panel submitted-panel">
+
+            <div class="panel-label">
+                SUBMITTED INFORMATION
+            </div>
+
+            <h2>
+                Application data
+            </h2>
+
+
+            {% if submitted %}
+
+            <div class="review-fields">
+
+                {% if verification['purpose'] == 'SCHOLARSHIP' %}
+
+                    <div>
+                        <span>Name</span>
+                        <strong>
+                            {{ submitted['name'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>USN</span>
+                        <strong>
+                            {{ submitted['usn'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>SSP ID</span>
+                        <strong>
+                            {{ submitted['ssp_id'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Mobile</span>
+                        <strong>
+                            {{ submitted['mobile'] }}
+                        </strong>
+                    </div>
+
+
+                    <div class="wide-field">
+                        <span>NSP OTR Number</span>
+                        <strong>
+                            {{ submitted['nsp_otr'] }}
+                        </strong>
+                    </div>
+
+
+                {% else %}
+
+                    <div>
+                        <span>Name</span>
+                        <strong>
+                            {{ submitted['name'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>USN</span>
+                        <strong>
+                            {{ submitted['usn'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Father/Mother Name</span>
+                        <strong>
+                            {{ submitted['parent_name'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Course</span>
+                        <strong>
+                            {{ submitted['course'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Branch</span>
+                        <strong>
+                            {{ submitted['branch'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Semester</span>
+                        <strong>
+                            {{ submitted['semester'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Seat Allotment Category</span>
+                        <strong>
+                            {{ submitted['seat_category'] }}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Mobile</span>
+                        <strong>
+                            {{ submitted['mobile'] }}
+                        </strong>
+                    </div>
+
+
+                    <div class="wide-field">
+                        <span>Address</span>
+                        <strong>
+                            {{ submitted['address'] }}
+                        </strong>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-inline">
+                No submitted information found.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SCHOLARSHIP ACKNOWLEDGEMENT
+         ===================================================== -->
+
+    {% if verification['purpose'] == 'SCHOLARSHIP' %}
+
+    <section class="review-panel document-review-panel">
+
+        <div class="panel-label">
+            SCHOLARSHIP DOCUMENT
+        </div>
+
+        <div class="panel-heading-row">
+
+            <div>
+
+                <h2>
+                    Scholarship acknowledgement
+                </h2>
+
+                <p>
+                    Review the acknowledgement submitted by the student.
+                </p>
+
+            </div>
+
+
+            <span class="document-type-badge">
+                Required document
+            </span>
+
+        </div>
+
+
+        {% if documents %}
+
+            <div class="document-list">
+
+                {% for document in documents %}
+
+                    {% if document['doc_type'] == 'SCHOLARSHIP_ACKNOWLEDGEMENT' %}
+
+                    <div class="document-row">
+
+                        <div class="document-info">
+
+                            <div class="document-icon">
+                                ACK
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Scholarship Acknowledgement
+                                </strong>
+
+                                <span>
+                                    {{ document['original_name'] }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="{{ url_for(
+                                'admin_document',
+                                filename=document['filename']
+                            ) }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="document-view-link"
+                        >
+                            Open document →
+                        </a>
+
+                    </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-inline">
+                No acknowledgement document was uploaded.
+            </div>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         ADMISSION DOCUMENTS
+         ===================================================== -->
+
+    {% if verification['purpose'] == 'HIGHER_SEMESTER_ADMISSION' %}
+
+    <section class="review-panel document-review-panel">
+
+        <div class="panel-label">
+            DOCUMENT REVIEW
+        </div>
+
+        <div class="panel-heading-row">
+
+            <div>
+
+                <h2>
+                    Uploaded documents
+                </h2>
+
+                <p>
+                    Review the marks cards and student ID card.
+                </p>
+
+            </div>
+
+            <span class="document-type-badge">
+                Supporting documents
+            </span>
+
+        </div>
+
+
+        <!-- OCR -->
+        <div class="ocr-review-box">
+
+            <div class="ocr-review-heading">
+
+                <div>
+
+                    <span class="panel-label">
+                        AUTOMATED ASSISTANCE
+                    </span>
+
+                    <h3>
+                        OCR comparison
+                    </h3>
+
+                </div>
+
+
+                {% if verification['match_status'] == 'MATCH' %}
+
+                    <span class="status-badge status-approved">
+                        Match
+                    </span>
+
+                {% else %}
+
+                    <span class="status-badge status-rejected">
+                        Mismatch
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="ocr-result-grid">
+
+                <div>
+
+                    <span>
+                        OCR Name
+                    </span>
+
+                    <strong>
+                        {{ verification['ocr_name'] or 'Not detected' }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        OCR USN
+                    </span>
+
+                    <strong>
+                        {{ verification['ocr_usn'] or 'Not detected' }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Comparison
+                    </span>
+
+                    <strong
+                        class="
+                            {% if verification['match_status'] == 'MATCH' %}
+                                text-success
+                            {% else %}
+                                text-danger
+                            {% endif %}
+                        "
+                    >
+
+                        {% if verification['match_status'] == 'MATCH' %}
+                            Match
+                        {% else %}
+                            Mismatch
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="ocr-disclaimer">
+                OCR is an assistance feature only. The administrator
+                makes the final verification decision.
+            </div>
+
+        </div>
+
+
+        <!-- DOCUMENTS -->
+
+        {% if documents %}
+
+        <div class="document-list">
+
+            {% for document in documents %}
+
+            <div class="document-row">
+
+                <div class="document-info">
+
+                    <div class="document-icon">
+
+                        {% if document['doc_type'] == 'ID_CARD' %}
+                            ID
+                        {% else %}
+                            MC
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+
+                            {% if document['doc_type'] == 'ID_CARD' %}
+
+                                Student ID Card
+
+                            {% else %}
+
+                                Previous Semester Marks Card
+
+                            {% endif %}
+
+                        </strong>
+
+
+                        <span>
+                            {{ document['original_name'] }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for(
+                        'admin_document',
+                        filename=document['filename']
+                    ) }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="document-view-link"
+                >
+                    Open document →
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-inline">
+            No documents were uploaded.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         CURRENT MESSAGE
+         ===================================================== -->
+
+    {% if verification['admin_message'] %}
+
+    <section class="existing-message">
+
+        <div class="panel-label">
+            CURRENT STUDENT MESSAGE
+        </div>
+
+        <p>
+            {{ verification['admin_message'] }}
+        </p>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         DECISION
+         ===================================================== -->
+
+    <section class="decision-panel">
+
+        <div class="decision-intro">
+
+            <div class="panel-label">
+                ADMIN DECISION
+            </div>
+
+            <h2>
+                Final review
+            </h2>
+
+            <p>
+                Select the appropriate decision. The student will
+                receive the result automatically.
+            </p>
+
+        </div>
+
+
+        <div
+            id="decision-message"
+            class="alert"
+            style="display:none;"
+        ></div>
+
+
+        <form
+            id="decision-form"
+            method="POST"
+            action="{{ url_for(
+                'admin_decision',
+                verification_id=verification['id']
+            ) }}"
+        >
+
+            <div class="decision-grid">
+
+                <div class="form-group">
+
+                    <label for="decision">
+                        Decision
+                    </label>
+
+                    <select
+                        id="decision"
+                        name="decision"
+                        class="form-control"
+                        required
+                    >
+
+                        <option value="">
+                            Select decision
+                        </option>
+
+                        <option value="VERIFIED">
+                            Approve
+                        </option>
+
+                        <option value="CORRECTION_REQUIRED">
+                            Request Correction
+                        </option>
+
+                        <option value="REJECTED">
+                            Reject
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="admin_message">
+                        Message to student
+                    </label>
+
+                    <textarea
+                        id="admin_message"
+                        name="admin_message"
+                        rows="5"
+                        class="form-control"
+                        maxlength="1000"
+                        placeholder="Enter an explanation for correction or rejection..."
+                    ></textarea>
+
+                    <small class="field-help">
+                        Required for correction and rejection.
+                        Approval uses the system success message.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="decision-footer">
+
+                <div class="decision-note">
+
+                    <strong>
+                        Review carefully before saving.
+                    </strong>
+
+                    The decision is written to the verification
+                    record and immediately synchronized to the
+                    student's status page.
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    id="decision-submit"
+                    class="btn btn-primary"
+                >
+                    Save Decision →
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =====================================================
+         AUDIT TRAIL
+         ===================================================== -->
+
+    {% if audit_logs %}
+
+    <section class="review-panel audit-panel">
+
+        <div class="panel-label">
+            AUDIT TRAIL
+        </div>
+
+        <h2>
+            Activity history
+        </h2>
+
+
+        <div class="audit-list">
+
+            {% for log in audit_logs %}
+
+            <div class="audit-row">
+
+                <span class="audit-action">
+                    {{ log['action'] }}
+                </span>
+
+                <span class="audit-details">
+                    {{ log['details'] }}
+                </span>
+
+                <span class="audit-time">
+                    {{ log['created_at'] }}
+                </span>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+</div>
+
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/admin-review.js',
+        v='7'
+    ) }}"
+></script>
+
+{% endblock %}

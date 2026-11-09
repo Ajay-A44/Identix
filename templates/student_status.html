@@ -1,0 +1,452 @@
+{% extends "base.html" %}
+
+{% block title %}
+Check Status | Identix
+{% endblock %}
+
+{% block content %}
+
+<div class="status-page">
+
+    <a
+        href="{{ url_for('student_dashboard') }}"
+        class="back-link"
+    >
+        ← Back to Dashboard
+    </a>
+
+
+    <div class="status-page-header">
+
+        <div>
+
+            <div class="eyebrow">
+                APPLICATION STATUS
+            </div>
+
+            <h1>
+                Track your applications
+            </h1>
+
+            <p>
+                Status updates are delivered automatically when
+                the administrator makes a decision.
+            </p>
+
+        </div>
+
+
+        <div class="live-indicator">
+
+            <span class="live-dot"></span>
+
+            Live status
+
+        </div>
+
+    </div>
+
+
+    <!-- SCHOLARSHIP -->
+
+    <section
+        class="status-detail-card live-application"
+        data-application-id="
+            {% if scholarship %}
+                {{ scholarship['id'] }}
+            {% endif %}
+        "
+    >
+
+        <div class="status-card-header">
+
+            <div>
+
+                <div class="status-card-number">
+                    APPLICATION 01
+                </div>
+
+                <h2>
+                    Scholarship Verification
+                </h2>
+
+                <span class="last-updated">
+
+                    Application ID:
+                    <strong id="status-scholarship-id">
+                        {% if scholarship %}
+                            {{ scholarship['verification_id'] }}
+                        {% else %}
+                            Not submitted
+                        {% endif %}
+                    </strong>
+
+                </span>
+
+            </div>
+
+
+            <span
+                id="page-scholarship-status"
+                class="
+                    status-badge
+                    {% if scholarship and scholarship['status'] == 'UNDER_REVIEW' %}
+                        status-review
+                    {% elif scholarship and scholarship['status'] == 'VERIFIED' %}
+                        status-approved
+                    {% elif scholarship and scholarship['status'] == 'REJECTED' %}
+                        status-rejected
+                    {% elif scholarship and scholarship['status'] == 'CORRECTION_REQUIRED' %}
+                        status-correction
+                    {% else %}
+                        status-pending
+                    {% endif %}
+                "
+            >
+
+                {% if scholarship %}
+
+                    {% if scholarship['status'] == 'UNDER_REVIEW' %}
+                        Under Review
+                    {% elif scholarship['status'] == 'VERIFIED' %}
+                        Approved
+                    {% elif scholarship['status'] == 'REJECTED' %}
+                        Rejected
+                    {% elif scholarship['status'] == 'CORRECTION_REQUIRED' %}
+                        Correction Required
+                    {% else %}
+                        Not Submitted
+                    {% endif %}
+
+                {% else %}
+
+                    Not Submitted
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+        <div class="status-detail-grid">
+
+            <div>
+
+                <span>
+                    Submitted
+                </span>
+
+                <strong
+                    id="status-scholarship-submitted"
+                >
+                    {% if scholarship %}
+                        {{ scholarship['submitted_at'] }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Reviewed
+                </span>
+
+                <strong
+                    id="status-scholarship-reviewed"
+                >
+                    {% if scholarship and scholarship['reviewed_at'] %}
+                        {{ scholarship['reviewed_at'] }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Last updated
+                </span>
+
+                <strong
+                    id="status-scholarship-updated"
+                >
+                    {% if scholarship %}
+                        {{ scholarship['updated_at'] }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="page-scholarship-message"
+            class="status-message"
+            {% if not scholarship or not scholarship['admin_message'] %}
+                style="display:none;"
+            {% endif %}
+        >
+
+            {% if scholarship %}
+                {{ scholarship['admin_message'] }}
+            {% endif %}
+
+        </div>
+
+
+        <div class="status-card-footer">
+
+            {% if scholarship %}
+
+            <a
+                href="{{ url_for(
+                    'student_application_status',
+                    verification_id=scholarship['id']
+                ) }}"
+                class="btn btn-primary"
+            >
+                Open Application →
+            </a>
+
+            {% else %}
+
+            <a
+                href="{{ url_for(
+                    'student_verification',
+                    purpose='SCHOLARSHIP'
+                ) }}"
+                class="btn btn-primary"
+            >
+                Start Scholarship Verification →
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- ADMISSION -->
+
+    <section
+        class="status-detail-card live-application"
+        data-application-id="
+            {% if admission %}
+                {{ admission['id'] }}
+            {% endif %}
+        "
+    >
+
+        <div class="status-card-header">
+
+            <div>
+
+                <div class="status-card-number">
+                    APPLICATION 02
+                </div>
+
+                <h2>
+                    Higher Semester Admission
+                </h2>
+
+                <span class="last-updated">
+
+                    Application ID:
+                    <strong id="status-admission-id">
+                        {% if admission %}
+                            {{ admission['verification_id'] }}
+                        {% else %}
+                            Not submitted
+                        {% endif %}
+                    </strong>
+
+                </span>
+
+            </div>
+
+
+            <span
+                id="page-admission-status"
+                class="
+                    status-badge
+                    {% if admission and admission['status'] == 'UNDER_REVIEW' %}
+                        status-review
+                    {% elif admission and admission['status'] == 'VERIFIED' %}
+                        status-approved
+                    {% elif admission and admission['status'] == 'REJECTED' %}
+                        status-rejected
+                    {% elif admission and admission['status'] == 'CORRECTION_REQUIRED' %}
+                        status-correction
+                    {% else %}
+                        status-pending
+                    {% endif %}
+                "
+            >
+
+                {% if admission %}
+
+                    {% if admission['status'] == 'UNDER_REVIEW' %}
+                        Under Review
+                    {% elif admission['status'] == 'VERIFIED' %}
+                        Approved
+                    {% elif admission['status'] == 'REJECTED' %}
+                        Rejected
+                    {% elif admission['status'] == 'CORRECTION_REQUIRED' %}
+                        Correction Required
+                    {% else %}
+                        Not Submitted
+                    {% endif %}
+
+                {% else %}
+
+                    Not Submitted
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+        <div class="status-detail-grid">
+
+            <div>
+
+                <span>
+                    Submitted
+                </span>
+
+                <strong
+                    id="status-admission-submitted"
+                >
+                    {% if admission %}
+                        {{ admission['submitted_at'] }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Reviewed
+                </span>
+
+                <strong
+                    id="status-admission-reviewed"
+                >
+                    {% if admission and admission['reviewed_at'] %}
+                        {{ admission['reviewed_at'] }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Last updated
+                </span>
+
+                <strong
+                    id="status-admission-updated"
+                >
+                    {% if admission %}
+                        {{ admission['updated_at'] }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="page-admission-message"
+            class="status-message"
+            {% if not admission or not admission['admin_message'] %}
+                style="display:none;"
+            {% endif %}
+        >
+
+            {% if admission %}
+                {{ admission['admin_message'] }}
+            {% endif %}
+
+        </div>
+
+
+        <div class="status-card-footer">
+
+            {% if admission %}
+
+            <a
+                href="{{ url_for(
+                    'student_application_status',
+                    verification_id=admission['id']
+                ) }}"
+                class="btn btn-primary"
+            >
+                Open Application →
+            </a>
+
+            {% else %}
+
+            <a
+                href="{{ url_for(
+                    'student_verification',
+                    purpose='HIGHER_SEMESTER_ADMISSION'
+                ) }}"
+                class="btn btn-primary"
+            >
+                Start Admission Verification →
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <div class="status-page-note">
+
+        <span class="live-dot"></span>
+
+        This page stays synchronized with the administrator's
+        latest decision.
+
+    </div>
+
+</div>
+
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/student-status.js',
+        v='6'
+    ) }}"
+></script>
+
+{% endblock %}

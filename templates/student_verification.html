@@ -1,0 +1,758 @@
+{% extends "base.html" %}
+
+{% block title %}
+Verification | Identix
+{% endblock %}
+
+{% block content %}
+
+<div class="verification-page">
+
+    <div class="verification-top">
+
+        <a
+            href="{{ url_for('student_dashboard') }}"
+            class="back-link"
+        >
+            ← Back to Dashboard
+        </a>
+
+
+        <div class="verification-heading">
+
+            <div>
+
+                <div class="eyebrow">
+                    STUDENT VERIFICATION
+                </div>
+
+                <h1>
+                    Submit a verification request
+                </h1>
+
+                <p>
+                    Select a service below to continue.
+                </p>
+
+            </div>
+
+
+            <div class="verification-id-box">
+
+                <span>
+                    VERIFICATION ID
+                </span>
+
+                <strong>
+                    {{ verification_id }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PURPOSE
+         ===================================================== -->
+
+    <section class="purpose-card-section">
+
+        <div class="eyebrow">
+            VERIFICATION PURPOSE
+        </div>
+
+
+        <div class="purpose-grid">
+
+
+            <a
+                href="{{ url_for(
+                    'student_verification',
+                    purpose='SCHOLARSHIP'
+                ) }}"
+                class="purpose-option-link"
+            >
+
+                <div
+                    class="
+                        purpose-box
+                        {% if selected_purpose == 'SCHOLARSHIP' %}
+                            selected-purpose
+                        {% endif %}
+                    "
+                >
+
+                    <div class="purpose-number">
+                        01
+                    </div>
+
+                    <h3>
+                        Scholarship Verification
+                    </h3>
+
+                    <p>
+                        Scholarship details and acknowledgement document.
+                    </p>
+
+                    <span class="purpose-select">
+
+                        {% if selected_purpose == 'SCHOLARSHIP' %}
+                            Selected ✓
+                        {% else %}
+                            Select →
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for(
+                    'student_verification',
+                    purpose='HIGHER_SEMESTER_ADMISSION'
+                ) }}"
+                class="purpose-option-link"
+            >
+
+                <div
+                    class="
+                        purpose-box
+                        {% if selected_purpose == 'HIGHER_SEMESTER_ADMISSION' %}
+                            selected-purpose
+                        {% endif %}
+                    "
+                >
+
+                    <div class="purpose-number">
+                        02
+                    </div>
+
+                    <h3>
+                        Higher Semester Admission
+                    </h3>
+
+                    <p>
+                        Admission details, marks cards and ID card.
+                    </p>
+
+                    <span class="purpose-select">
+
+                        {% if selected_purpose == 'HIGHER_SEMESTER_ADMISSION' %}
+                            Selected ✓
+                        {% else %}
+                            Select →
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    {% if not selected_purpose %}
+
+    <section class="verification-empty-state">
+
+        <div class="empty-select-icon">
+            ↑
+        </div>
+
+        <h2>
+            Select a verification service
+        </h2>
+
+        <p>
+            Choose one of the services above to continue.
+        </p>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         SCHOLARSHIP
+         ===================================================== -->
+
+    {% if selected_purpose == "SCHOLARSHIP" %}
+
+    <form
+        method="POST"
+        action="{{ url_for('student_verification') }}"
+        enctype="multipart/form-data"
+        class="verification-form-card"
+    >
+
+        <input
+            type="hidden"
+            name="purpose"
+            value="SCHOLARSHIP"
+        >
+
+
+        <div class="section-title-row">
+
+            <div>
+
+                <div class="eyebrow">
+                    SERVICE 01
+                </div>
+
+                <h2>
+                    Scholarship Verification
+                </h2>
+
+                <p>
+                    Enter your scholarship information and upload
+                    the acknowledgement document.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+            <div class="form-group">
+
+                <label for="scholarship_name">
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="scholarship_name"
+                    name="name"
+                    value="{{ student['name'] }}"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="scholarship_usn">
+                    USN
+                </label>
+
+                <input
+                    type="text"
+                    id="scholarship_usn"
+                    name="usn"
+                    value="{{ student['usn'] }}"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="ssp_id">
+                    SSP ID
+                </label>
+
+                <input
+                    type="text"
+                    id="ssp_id"
+                    name="ssp_id"
+                    placeholder="Enter SSP ID"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="scholarship_mobile">
+                    Mobile no
+                </label>
+
+                <input
+                    type="tel"
+                    id="scholarship_mobile"
+                    name="mobile"
+                    value="{{ student['phone'] }}"
+                    maxlength="10"
+                    inputmode="numeric"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+                <label for="nsp_otr">
+                    NSP OTR number
+                </label>
+
+                <input
+                    type="text"
+                    id="nsp_otr"
+                    name="nsp_otr"
+                    placeholder="Enter NSP OTR number"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ACKNOWLEDGEMENT -->
+
+            <div class="form-group full-width">
+
+                <label for="acknowledgement">
+                    Scholarship acknowledgement
+                </label>
+
+                <div class="upload-box premium-upload">
+
+                    <div class="upload-content">
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Upload acknowledgement
+                            </strong>
+
+                            <span>
+                                PDF, JPG, JPEG or PNG · Maximum 20 MB
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <input
+                        type="file"
+                        id="acknowledgement"
+                        name="acknowledgement"
+                        accept=".pdf,.png,.jpg,.jpeg"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <a
+                href="{{ url_for('student_dashboard') }}"
+                class="btn btn-outline"
+            >
+                ← Back
+            </a>
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Submit for Review →
+            </button>
+
+        </div>
+
+    </form>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         ADMISSION
+         ===================================================== -->
+
+    {% if selected_purpose == "HIGHER_SEMESTER_ADMISSION" %}
+
+    <form
+        method="POST"
+        action="{{ url_for('student_verification') }}"
+        enctype="multipart/form-data"
+        class="verification-form-card"
+    >
+
+        <input
+            type="hidden"
+            name="purpose"
+            value="HIGHER_SEMESTER_ADMISSION"
+        >
+
+
+        <div class="section-title-row">
+
+            <div>
+
+                <div class="eyebrow">
+                    SERVICE 02
+                </div>
+
+                <h2>
+                    Higher Semester Admission
+                </h2>
+
+                <p>
+                    Enter the admission details and upload
+                    the required documents.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+            <div class="form-group">
+
+                <label for="admission_name">
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="admission_name"
+                    name="name"
+                    value="{{ student['name'] }}"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="admission_usn">
+                    USN
+                </label>
+
+                <input
+                    type="text"
+                    id="admission_usn"
+                    name="usn"
+                    value="{{ student['usn'] }}"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="parent_name">
+                    Father/Mother name
+                </label>
+
+                <input
+                    type="text"
+                    id="parent_name"
+                    name="parent_name"
+                    placeholder="Enter Father/Mother name"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="course">
+                    Course
+                </label>
+
+                <input
+                    type="text"
+                    id="course"
+                    name="course"
+                    value="{{ student['course'] }}"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="branch">
+                    Branch
+                </label>
+
+                <input
+                    type="text"
+                    id="branch"
+                    name="branch"
+                    value="{{ student['branch'] }}"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="semester">
+                    Semester
+                </label>
+
+                <select
+                    id="semester"
+                    name="semester"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select semester
+                    </option>
+
+                    <option value="3">
+                        3rd Semester
+                    </option>
+
+                    <option value="4">
+                        4th Semester
+                    </option>
+
+                    <option value="5">
+                        5th Semester
+                    </option>
+
+                    <option value="6">
+                        6th Semester
+                    </option>
+
+                    <option value="7">
+                        7th Semester
+                    </option>
+
+                    <option value="8">
+                        8th Semester
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="seat_category">
+                    Seat allotment category
+                </label>
+
+                <select
+                    id="seat_category"
+                    name="seat_category"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Select category
+                    </option>
+
+                    <option value="KEA">
+                        KEA
+                    </option>
+
+                    <option value="COMEDK">
+                        COMEDK
+                    </option>
+
+                    <option value="MANAGEMENT">
+                        Management
+                    </option>
+
+                    <option value="OTHER">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="admission_mobile">
+                    Mobile no
+                </label>
+
+                <input
+                    type="tel"
+                    id="admission_mobile"
+                    name="mobile"
+                    value="{{ student['phone'] }}"
+                    maxlength="10"
+                    inputmode="numeric"
+                    class="form-control"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+                <label for="address">
+                    Address
+                </label>
+
+                <textarea
+                    id="address"
+                    name="address"
+                    rows="4"
+                    placeholder="Enter your address"
+                    class="form-control"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+                <label for="marks_cards">
+                    Previous semesters' marks cards
+                </label>
+
+                <div class="upload-box premium-upload">
+
+                    <div class="upload-content">
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Upload marks cards
+                            </strong>
+
+                            <span>
+                                Multiple files allowed · PDF, JPG, JPEG or PNG
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <input
+                        type="file"
+                        id="marks_cards"
+                        name="marks_cards"
+                        multiple
+                        accept=".pdf,.png,.jpg,.jpeg"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+                <label for="id_card">
+                    ID card
+                </label>
+
+                <div class="upload-box premium-upload">
+
+                    <div class="upload-content">
+
+                        <div class="upload-icon">
+                            ID
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Upload student ID card
+                            </strong>
+
+                            <span>
+                                PDF, JPG, JPEG or PNG
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <input
+                        type="file"
+                        id="id_card"
+                        name="id_card"
+                        accept=".pdf,.png,.jpg,.jpeg"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <a
+                href="{{ url_for('student_dashboard') }}"
+                class="btn btn-outline"
+            >
+                ← Back
+            </a>
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Submit for Review →
+            </button>
+
+        </div>
+
+    </form>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Student Verification | Identix</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 18px 35px;
+            font-weight: bold;
+            font-size: 21px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .lookup {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lookup input {
+            flex: 1;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #475569;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        .student-box {
+            margin-top: 25px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .value {
+            font-weight: 600;
+        }
+
+        .button {
+            border: none;
+            border-radius: 7px;
+            padding: 12px 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #1d4ed8;
+        }
+
+        .error {
+            background: #fef2f2;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        @media(max-width: 700px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .lookup {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <div class="header">
+        SecureVerify
+    </div>
+
+
+    <div class="container">
+
+        <div class="card">
+
+            <h1>
+                Student Verification
+            </h1>
+
+            <div class="subtitle">
+
+                Enter your registered University Seat Number (USN).
+
+            </div>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% for category, message in messages %}
+
+                    <div class="error">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endwith %}
+
+
+            {% if not student %}
+
+                <form
+                    method="POST"
+                    action="/student"
+                >
+
+                    <div class="field">
+
+                        <label>
+                            University Seat Number
+                        </label>
+
+                        <div class="lookup">
+
+                            <input
+                                type="text"
+                                name="usn"
+                                placeholder="1RV23CS001"
+                                required
+                            >
+
+                            <button
+                                type="submit"
+                                class="button primary"
+                            >
+                                Find Student
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+            {% else %}
+
+
+                <div class="student-box">
+
+                    <h2>
+                        Student Record
+                    </h2>
+
+
+                    <div class="grid">
+
+                        <div>
+                            <label>USN</label>
+
+                            <div class="value">
+                                {{ student["usn"] }}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <label>Name</label>
+
+                            <div class="value">
+                                {{ student["name"] }}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <label>Date of Birth</label>
+
+                            <div class="value">
+                                {{ student["dob"] }}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <label>Department</label>
+
+                            <div class="value">
+                                {{ student["department"] }}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <label>Year</label>
+
+                            <div class="value">
+                                {{ student["year"] }}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <label>Email</label>
+
+                            <div class="value">
+                                {{ student["email"] }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="/verify"
+                    enctype="multipart/form-data"
+                    style="margin-top:30px;"
+                >
+
+                    <input
+                        type="hidden"
+                        name="usn"
+                        value="{{ student['usn'] }}"
+                    >
+
+
+                    <div class="grid">
+
+
+                        <div class="field">
+
+                            <label>
+                                Application ID
+                            </label>
+
+                            <input
+                                type="text"
+                                name="application_id"
+                                placeholder="SCH-001"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Phone
+                            </label>
+
+                            <input
+                                type="tel"
+                                name="phone"
+                                value="{{ student['phone'] }}"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                value="{{ student['email'] }}"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Verification Purpose
+                            </label>
+
+                            <select
+                                name="purpose"
+                                required
+                            >
+
+                                <option value="">
+                                    Select purpose
+                                </option>
+
+                                <option>
+                                    Scholarship Application
+                                </option>
+
+                                <option>
+                                    College Admission
+                                </option>
+
+                                <option>
+                                    Internship Verification
+                                </option>
+
+                                <option>
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Document Type
+                            </label>
+
+                            <select
+                                name="document_type"
+                                required
+                            >
+
+                                <option value="">
+                                    Select document
+                                </option>
+
+                                <option>
+                                    Sample Identity Document
+                                </option>
+
+                                <option>
+                                    Student Identity Card
+                                </option>
+
+                                <option>
+                                    Passport
+                                </option>
+
+                                <option>
+                                    Driving Licence
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Document Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="document_number"
+                                placeholder="DEMO-482913"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field full">
+
+                            <label>
+                                Upload Identity Document
+                            </label>
+
+                            <input
+                                type="file"
+                                name="document"
+                                accept=".png,.jpg,.jpeg"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="button primary"
+                    >
+                        Submit for Verification
+                    </button>
+
+                </form>
+
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

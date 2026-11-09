@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+
+{% block title %}
+Student Dashboard | Identix
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <section class="dashboard-hero">
+
+        <div class="dashboard-hero-content">
+
+            <div class="eyebrow hero-eyebrow">
+                STUDENT VERIFICATION PORTAL
+            </div>
+
+            <h1>
+                Welcome,
+                <span>
+                    {{ student['name'] }}
+                </span>
+            </h1>
+
+            <p>
+                Manage your scholarship and admission verification
+                applications from one secure portal.
+            </p>
+
+        </div>
+
+
+        <div class="identity-chip">
+
+            <span>
+                STUDENT VERIFICATION ID
+            </span>
+
+            <strong>
+                {{ verification_id }}
+            </strong>
+
+            <a
+                href="{{ url_for('student_check_status') }}"
+                class="hero-status-link"
+            >
+                View application status →
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROFILE -->
+
+    <section class="profile-card">
+
+        <div class="profile-avatar">
+            {{ student['name'][0]|upper }}
+        </div>
+
+
+        <div class="profile-main">
+
+            <strong class="profile-name">
+                {{ student['name'] }}
+            </strong>
+
+            <span class="profile-usn">
+                {{ student['usn'] }}
+            </span>
+
+        </div>
+
+
+        <div class="profile-details">
+
+            <div class="profile-item">
+
+                <span>
+                    Course
+                </span>
+
+                <strong>
+                    {{ student['course'] }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Branch
+                </span>
+
+                <strong>
+                    {{ student['branch'] }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Year
+                </span>
+
+                <strong>
+                    {{ student['year'] }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Mobile
+                </span>
+
+                <strong>
+                    {{ student['phone'] }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SERVICES -->
+
+    <section class="services-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <div class="eyebrow">
+                    VERIFICATION SERVICES
+                </div>
+
+                <h2>
+                    Your applications
+                </h2>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('student_check_status') }}"
+                class="status-check-button"
+            >
+                Check Status
+                <span>↗</span>
+            </a>
+
+        </div>
+
+
+        <div class="service-grid">
+
+
+            <!-- =================================================
+                 SCHOLARSHIP
+                 ================================================= -->
+
+            <article
+                class="service-card application-card"
+                data-application-id="
+                    {% if scholarship %}
+                        {{ scholarship['id'] }}
+                    {% endif %}
+                "
+            >
+
+                <div class="service-top">
+
+                    <div class="service-icon scholarship-icon">
+                        S
+                    </div>
+
+
+                    <span
+                        id="scholarship-status"
+                        class="status-badge
+                        {% if scholarship and scholarship['status'] == 'UNDER_REVIEW' %}
+                            status-review
+                        {% elif scholarship and scholarship['status'] == 'VERIFIED' %}
+                            status-approved
+                        {% elif scholarship and scholarship['status'] == 'REJECTED' %}
+                            status-rejected
+                        {% elif scholarship and scholarship['status'] == 'CORRECTION_REQUIRED' %}
+                            status-correction
+                        {% else %}
+                            status-pending
+                        {% endif %}"
+                    >
+
+                        {% if scholarship %}
+
+                            {% if scholarship['status'] == 'UNDER_REVIEW' %}
+                                Under Review
+                            {% elif scholarship['status'] == 'VERIFIED' %}
+                                Approved
+                            {% elif scholarship['status'] == 'REJECTED' %}
+                                Rejected
+                            {% elif scholarship['status'] == 'CORRECTION_REQUIRED' %}
+                                Correction Required
+                            {% else %}
+                                Not Submitted
+                            {% endif %}
+
+                        {% else %}
+
+                            Not Submitted
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Scholarship Verification
+                </h3>
+
+
+                <p>
+                    Verify scholarship details and acknowledgement.
+                </p>
+
+
+                <div class="service-meta">
+
+                    <span>
+                        Application ID
+                    </span>
+
+                    <strong id="scholarship-verification-id">
+
+                        {% if scholarship %}
+                            {{ scholarship['verification_id'] }}
+                        {% else %}
+                            Not submitted
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div
+                    id="scholarship-message"
+                    class="service-message"
+                    {% if not scholarship or not scholarship['admin_message'] %}
+                        style="display:none;"
+                    {% endif %}
+                >
+
+                    {% if scholarship %}
+                        {{ scholarship['admin_message'] }}
+                    {% endif %}
+
+                </div>
+
+
+                <div class="application-actions">
+
+                    <a
+                        href="{{ url_for(
+                            'student_verification',
+                            purpose='SCHOLARSHIP'
+                        ) }}"
+                        class="service-action"
+                    >
+                        {% if scholarship %}
+                            Submit another request
+                        {% else %}
+                            Start verification
+                        {% endif %}
+
+                        <span>
+                            →
+                        </span>
+                    </a>
+
+
+                    {% if scholarship %}
+
+                    <a
+                        href="{{ url_for(
+                            'student_application_status',
+                            verification_id=scholarship['id']
+                        ) }}"
+                        class="application-status-link"
+                    >
+                        View this application's status
+                        <span>↗</span>
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================================
+                 ADMISSION
+                 ================================================= -->
+
+            <article
+                class="service-card application-card"
+                data-application-id="
+                    {% if admission %}
+                        {{ admission['id'] }}
+                    {% endif %}
+                "
+            >
+
+                <div class="service-top">
+
+                    <div class="service-icon admission-icon">
+                        A
+                    </div>
+
+
+                    <span
+                        id="admission-status"
+                        class="status-badge
+                        {% if admission and admission['status'] == 'UNDER_REVIEW' %}
+                            status-review
+                        {% elif admission and admission['status'] == 'VERIFIED' %}
+                            status-approved
+                        {% elif admission and admission['status'] == 'REJECTED' %}
+                            status-rejected
+                        {% elif admission and admission['status'] == 'CORRECTION_REQUIRED' %}
+                            status-correction
+                        {% else %}
+                            status-pending
+                        {% endif %}"
+                    >
+
+                        {% if admission %}
+
+                            {% if admission['status'] == 'UNDER_REVIEW' %}
+                                Under Review
+                            {% elif admission['status'] == 'VERIFIED' %}
+                                Approved
+                            {% elif admission['status'] == 'REJECTED' %}
+                                Rejected
+                            {% elif admission['status'] == 'CORRECTION_REQUIRED' %}
+                                Correction Required
+                            {% else %}
+                                Not Submitted
+                            {% endif %}
+
+                        {% else %}
+
+                            Not Submitted
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    Higher Semester Admission
+                </h3>
+
+
+                <p>
+                    Submit admission information and supporting documents.
+                </p>
+
+
+                <div class="service-meta">
+
+                    <span>
+                        Application ID
+                    </span>
+
+                    <strong id="admission-verification-id">
+
+                        {% if admission %}
+                            {{ admission['verification_id'] }}
+                        {% else %}
+                            Not submitted
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div
+                    id="admission-message"
+                    class="service-message"
+                    {% if not admission or not admission['admin_message'] %}
+                        style="display:none;"
+                    {% endif %}
+                >
+
+                    {% if admission %}
+                        {{ admission['admin_message'] }}
+                    {% endif %}
+
+                </div>
+
+
+                <div class="application-actions">
+
+                    <a
+                        href="{{ url_for(
+                            'student_verification',
+                            purpose='HIGHER_SEMESTER_ADMISSION'
+                        ) }}"
+                        class="service-action"
+                    >
+                        {% if admission %}
+                            Submit another request
+                        {% else %}
+                            Start verification
+                        {% endif %}
+
+                        <span>
+                            →
+                        </span>
+                    </a>
+
+
+                    {% if admission %}
+
+                    <a
+                        href="{{ url_for(
+                            'student_application_status',
+                            verification_id=admission['id']
+                        ) }}"
+                        class="application-status-link"
+                    >
+                        View this application's status
+                        <span>↗</span>
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/student-status.js',
+        v='6'
+    ) }}"
+></script>
+
+{% endblock %}

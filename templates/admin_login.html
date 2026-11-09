@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Login | Verixa
+{% endblock %}
+
+{% block content %}
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+        <div class="auth-mark">
+            A
+        </div>
+
+        <div class="eyebrow">
+            ADMIN PORTAL
+        </div>
+
+        <h1>
+            Verification control
+        </h1>
+
+        <p class="auth-subtitle">
+            Review student verification requests.
+        </p>
+
+
+        {% if error %}
+
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            class="auth-form"
+        >
+
+            <div class="form-group">
+
+                <label for="admin_id">
+                    Admin ID
+                </label>
+
+                <input
+                    type="text"
+                    id="admin_id"
+                    name="admin_id"
+                    class="form-control"
+                    placeholder="Enter admin ID"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Enter password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary btn-full"
+            >
+                Sign in →
+            </button>
+
+        </form>
+
+
+        <a
+            href="{{ url_for('index') }}"
+            class="back-link centered-link"
+        >
+            ← Back to home
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

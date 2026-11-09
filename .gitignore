@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.vscode/
+.pytest_cache/
+*.db
+uploads/
+sample_id.png

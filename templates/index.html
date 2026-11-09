@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+Identix
+{% endblock %}
+
+{% block content %}
+
+<section class="landing">
+
+    <div class="landing-inner">
+
+        <div class="eyebrow">
+            SECURE DIGITAL IDENTITY VERIFICATION
+        </div>
+
+        <h1>
+            Verification made
+            <span>simple and secure.</span>
+        </h1>
+
+        <p>
+            A digital verification assistance portal for students
+            at Ballari Institute of Technology and Management.
+        </p>
+
+
+        <div class="landing-actions">
+
+            <a
+                href="{{ url_for('student_login') }}"
+                class="btn btn-primary btn-large"
+            >
+                Student Portal →
+            </a>
+
+            <a
+                href="{{ url_for('admin_login') }}"
+                class="btn btn-outline btn-large"
+            >
+                Admin Portal
+            </a>
+
+        </div>
+
+
+        <div class="landing-note">
+            Verification assistance prototype for academic workflows.
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

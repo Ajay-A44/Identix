@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}
+Verification Queue | Identix
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <a
+        href="{{ url_for('admin_dashboard') }}"
+        class="back-link"
+    >
+        ← Back to Dashboard
+    </a>
+
+
+    <div class="admin-page-head queue-head">
+
+        <div>
+
+            <div class="eyebrow">
+
+                {% if purpose == "SCHOLARSHIP" %}
+                    SERVICE 01 · SCHOLARSHIP
+                {% else %}
+                    SERVICE 02 · ADMISSION
+                {% endif %}
+
+            </div>
+
+            <h1>
+
+                {% if purpose == "SCHOLARSHIP" %}
+                    Scholarship verification
+                {% else %}
+                    Higher semester admission
+                {% endif %}
+
+            </h1>
+
+            <p>
+                Review requests from newest priority items first.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('admin_dashboard') }}"
+            class="btn btn-outline"
+        >
+            Dashboard
+        </a>
+
+    </div>
+
+
+    <section class="queue-summary-bar">
+
+        <div>
+            <span>Requests</span>
+            <strong>{{ verifications|length }}</strong>
+        </div>
+
+        <div>
+            <span>Under review</span>
+            <strong>
+                {{ verifications
+                   |selectattr('status', 'equalto', 'UNDER_REVIEW')
+                   |list
+                   |length
+                }}
+            </strong>
+        </div>
+
+        <div>
+            <span>Approved</span>
+            <strong>
+                {{ verifications
+                   |selectattr('status', 'equalto', 'VERIFIED')
+                   |list
+                   |length
+                }}
+            </strong>
+        </div>
+
+    </section>
+
+
+    <section class="table-card">
+
+        {% if verifications %}
+
+            <div class="table-wrapper">
+
+                <table class="data-table premium-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Verification
+                            </th>
+
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Match
+                            </th>
+
+                            <th>
+                                Submitted
+                            </th>
+
+                            <th>
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for row in verifications %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong class="table-id">
+                                    {{ row['verification_id'] }}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    {{ row['student_name'] }}
+                                </strong>
+
+                                <span class="table-subtext">
+                                    {{ row['student_usn'] }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                {% if row['status'] == 'UNDER_REVIEW' %}
+
+                                    <span class="status-badge status-review">
+                                        Under Review
+                                    </span>
+
+                                {% elif row['status'] == 'VERIFIED' %}
+
+                                    <span class="status-badge status-approved">
+                                        Approved
+                                    </span>
+
+                                {% elif row['status'] == 'REJECTED' %}
+
+                                    <span class="status-badge status-rejected">
+                                        Rejected
+                                    </span>
+
+                                {% elif row['status'] == 'CORRECTION_REQUIRED' %}
+
+                                    <span class="status-badge status-correction">
+                                        Correction Required
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if row['match_status'] == 'MATCH' %}
+
+                                    <span class="match-label match-ok">
+                                        Match
+                                    </span>
+
+                                {% elif row['match_status'] == 'MISMATCH' %}
+
+                                    <span class="match-label match-bad">
+                                        Mismatch
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="match-label">
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="table-date">
+                                    {{ row['submitted_at'] }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="{{ url_for(
+                                        'admin_verification_detail',
+                                        verification_id=row['id']
+                                    ) }}"
+                                    class="review-link"
+                                >
+                                    Review
+                                    <span>→</span>
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-state-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    No requests in this queue
+                </h3>
+
+                <p>
+                    New student submissions will appear here.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

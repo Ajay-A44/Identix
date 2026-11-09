@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="SecureVerify - Digital Identity Verification Portal"
+    >
+
+    <title>
+        {% block title %}
+            SecureVerify
+        {% endblock %}
+    </title>
+
+
+    <!-- =====================================================
+         MAIN CSS
+         v=7 forces the browser to use the latest CSS.
+         ===================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/style.css',
+            v='7'
+        ) }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVIGATION
+     ========================================================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <a
+            href="{{
+                url_for('student_dashboard')
+                if request.path.startswith('/student')
+                and session.get('student_id')
+                else
+                url_for('admin_dashboard')
+                if request.path.startswith('/admin')
+                and session.get('admin_id')
+                else
+                url_for('index')
+            }}"
+            class="brand-link"
+        >
+
+            <div class="brand-mark">
+                S
+            </div>
+
+        </a>
+
+
+        <div class="brand-text">
+
+            <div class="brand-name">
+                Verixa
+            </div>
+
+            <div class="brand-college">
+                Ballari Institute of Technology and Management
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STUDENT NAV
+         ===================================================== -->
+
+    {% if request.path.startswith('/student') %}
+
+        {% if session.get('student_id') %}
+
+        <nav class="nav-links">
+
+            <a
+                href="{{ url_for('student_dashboard') }}"
+                class="{% if request.endpoint == 'student_dashboard' %}active{% endif %}"
+            >
+                Dashboard
+            </a>
+
+
+            <a
+                href="{{ url_for('student_check_status') }}"
+                class="{% if request.endpoint == 'student_check_status' %}active{% endif %}"
+            >
+                Check Status
+            </a>
+
+
+            <a
+                href="{{ url_for('student_verification') }}"
+                class="{% if request.endpoint == 'student_verification' %}active{% endif %}"
+            >
+                Verification
+            </a>
+
+
+            <a
+                href="{{ url_for('student_logout') }}"
+            >
+                Sign out
+            </a>
+
+        </nav>
+
+        {% endif %}
+
+
+    <!-- =====================================================
+         ADMIN NAV
+         ===================================================== -->
+
+    {% elif request.path.startswith('/admin') %}
+
+        {% if session.get('admin_id') %}
+
+        <nav class="nav-links">
+
+            <a
+                href="{{ url_for('admin_dashboard') }}"
+                class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}"
+            >
+                Dashboard
+            </a>
+
+
+            <a
+                href="{{ url_for('admin_scholarships') }}"
+                class="{% if request.endpoint == 'admin_scholarships' %}active{% endif %}"
+            >
+                Scholarships
+            </a>
+
+
+            <a
+                href="{{ url_for('admin_admissions') }}"
+                class="{% if request.endpoint == 'admin_admissions' %}active{% endif %}"
+            >
+                Admissions
+            </a>
+
+
+            <a
+                href="{{ url_for('admin_logout') }}"
+            >
+                Sign out
+            </a>
+
+        </nav>
+
+        {% endif %}
+
+    {% else %}
+
+    {% endif %}
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main>
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+</body>
+
+</html>

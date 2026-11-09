@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block title %}
+Application {{ verification['verification_id'] }} | Identix
+{% endblock %}
+
+{% block content %}
+
+<div class="status-page">
+
+    <a
+        href="{{ url_for('student_check_status') }}"
+        class="back-link"
+    >
+        ← Back to Status
+    </a>
+
+
+    <div
+        class="status-detail-card application-detail-page"
+        data-application-id="{{ verification['id'] }}"
+    >
+
+        <div class="status-page-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    APPLICATION DETAILS
+                </div>
+
+                <h1>
+                    {% if verification['purpose'] == 'SCHOLARSHIP' %}
+                        Scholarship Verification
+                    {% else %}
+                        Higher Semester Admission
+                    {% endif %}
+                </h1>
+
+                <p>
+                    Application ID:
+                    <strong>
+                        {{ verification['verification_id'] }}
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <span
+                id="detail-status"
+                class="
+                    status-badge
+                    {% if verification['status'] == 'UNDER_REVIEW' %}
+                        status-review
+                    {% elif verification['status'] == 'VERIFIED' %}
+                        status-approved
+                    {% elif verification['status'] == 'REJECTED' %}
+                        status-rejected
+                    {% elif verification['status'] == 'CORRECTION_REQUIRED' %}
+                        status-correction
+                    {% else %}
+                        status-pending
+                    {% endif %}
+                "
+            >
+
+                {% if verification['status'] == 'UNDER_REVIEW' %}
+                    Under Review
+                {% elif verification['status'] == 'VERIFIED' %}
+                    Approved
+                {% elif verification['status'] == 'REJECTED' %}
+                    Rejected
+                {% elif verification['status'] == 'CORRECTION_REQUIRED' %}
+                    Correction Required
+                {% else %}
+                    Not Submitted
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+        <div class="status-detail-grid">
+
+            <div>
+
+                <span>
+                    Application ID
+                </span>
+
+                <strong id="detail-verification-id">
+                    {{ verification['verification_id'] }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Submitted
+                </span>
+
+                <strong id="detail-submitted">
+                    {{ verification['submitted_at'] }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Reviewed
+                </span>
+
+                <strong id="detail-reviewed">
+                    {{ verification['reviewed_at'] or '—' }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="detail-message"
+            class="status-message"
+            {% if not verification['admin_message'] %}
+                style="display:none;"
+            {% endif %}
+        >
+            {{ verification['admin_message'] or '' }}
+        </div>
+
+
+        <!-- =================================================
+             SUBMITTED INFORMATION
+             ================================================= -->
+
+        <div class="application-information">
+
+            <div class="eyebrow">
+                SUBMITTED INFORMATION
+            </div>
+
+            <h2>
+                Application details
+            </h2>
+
+
+            <div class="review-fields">
+
+                {% if verification['purpose'] == 'SCHOLARSHIP' %}
+
+                    <div>
+                        <span>Name</span>
+                        <strong>
+                            {{ submitted['name'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>USN</span>
+                        <strong>
+                            {{ submitted['usn'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>SSP ID</span>
+                        <strong>
+                            {{ submitted['ssp_id'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Mobile</span>
+                        <strong>
+                            {{ submitted['mobile'] }}
+                        </strong>
+                    </div>
+
+                    <div class="wide-field">
+                        <span>NSP OTR</span>
+                        <strong>
+                            {{ submitted['nsp_otr'] }}
+                        </strong>
+                    </div>
+
+                {% else %}
+
+                    <div>
+                        <span>Name</span>
+                        <strong>
+                            {{ submitted['name'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>USN</span>
+                        <strong>
+                            {{ submitted['usn'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Father/Mother</span>
+                        <strong>
+                            {{ submitted['parent_name'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Course</span>
+                        <strong>
+                            {{ submitted['course'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Branch</span>
+                        <strong>
+                            {{ submitted['branch'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Semester</span>
+                        <strong>
+                            {{ submitted['semester'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Seat Category</span>
+                        <strong>
+                            {{ submitted['seat_category'] }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Mobile</span>
+                        <strong>
+                            {{ submitted['mobile'] }}
+                        </strong>
+                    </div>
+
+                    <div class="wide-field">
+                        <span>Address</span>
+                        <strong>
+                            {{ submitted['address'] }}
+                        </strong>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DOCUMENTS
+             ================================================= -->
+
+        {% if documents %}
+
+        <div class="application-documents">
+
+            <div class="eyebrow">
+                DOCUMENTS
+            </div>
+
+            <h2>
+                Submitted files
+            </h2>
+
+
+            <div class="document-list">
+
+                {% for document in documents %}
+
+                <div class="document-row">
+
+                    <div class="document-info">
+
+                        <div class="document-icon">
+
+                            {% if document['doc_type'] == 'SCHOLARSHIP_ACKNOWLEDGEMENT' %}
+                                ACK
+                            {% elif document['doc_type'] == 'ID_CARD' %}
+                                ID
+                            {% else %}
+                                MC
+                            {% endif %}
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+
+                                {% if document['doc_type'] == 'SCHOLARSHIP_ACKNOWLEDGEMENT' %}
+                                    Scholarship Acknowledgement
+                                {% elif document['doc_type'] == 'ID_CARD' %}
+                                    Student ID Card
+                                {% else %}
+                                    Marks Card
+                                {% endif %}
+
+                            </strong>
+
+                            <span>
+                                {{ document['original_name'] }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/student-status.js',
+        v='6'
+    ) }}"
+></script>
+
+{% endblock %}
